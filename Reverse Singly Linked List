@@ -1,0 +1,17 @@
+void reverse(ListNode* prev, ListNode* &head, ListNode* forw){
+        if(forw==NULL){
+            head->next = prev;
+            return;
+        }
+        
+        head->next = prev;
+        prev = head;
+        head = forw;
+        forw=forw->next;
+        reverse(prev, head, forw);
+    }
+    ListNode* reverseList(ListNode* head) {
+        if(head==NULL) return head;
+        reverse(NULL, head, head->next);
+        return head;      
+    }
