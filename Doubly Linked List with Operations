@@ -1,0 +1,106 @@
+class Node{
+    public:
+    int data;
+    Node* prev;
+    Node* next;
+
+    Node(int data){
+        this->data = data;
+        prev = NULL;
+        next = NULL;
+    }
+    ~Node(){
+        int val=this->data;
+        if(this->next!=NULL || this->prev!=NULL){
+            this->next=NULL;
+            this->prev=NULL;
+            delete next;
+            delete prev;
+        }
+        cout<<"Memory is free from node with value "<<val<<endl;
+    }
+};
+
+void traverseFromHead(Node* head){
+    while(head!=NULL){
+        cout<<head->data<<" ";
+        head = head->next;
+    }
+    cout<<endl;
+}
+
+void traverseFromTail(Node* tail){
+    while(tail!=NULL){
+        cout<<tail->data<<" ";
+        tail = tail->prev;
+    }
+    cout<<endl;
+}
+
+void insertAthead(Node* &head, int val){
+    Node* temp = new Node(val);
+    head->prev = temp;
+    temp->next = head;
+    head = temp;
+}
+
+void insertAtTail(Node* &tail, int val){
+    Node* temp = new Node(val);
+    tail->next = temp;
+    temp->prev = tail;
+    tail = temp;
+}
+
+void inserAtPos(Node* &head, Node* &tail, int pos, int val){
+    if(pos==1){
+        insertAthead(head, val);
+    }
+    else{
+        int cnt=0;
+        Node* back = NULL;
+        Node* curr = head;
+        while(cnt<pos-1 && curr!=NULL){
+            back=curr;
+            curr=curr->next;
+            cnt++;
+        }
+        Node* temp = new Node(val);
+        back->next = temp;
+        temp->prev = back;
+        if(curr!=NULL){
+            temp->next = curr;
+            curr->prev = temp;
+        }
+        if(curr==NULL) tail = temp;
+    }
+}
+
+void deleteNode(Node* &head, Node* &tail, int pos){
+    if(pos==1){
+        Node* temp = head;
+        head = head->next;
+        delete temp;
+    }
+    else{
+        int cnt=0;
+        Node* back = NULL;
+        Node* curr = head;
+        while(cnt<pos-1 && curr!=NULL){
+            back=curr;
+            curr=curr->next;
+            cnt++;
+        }
+        Node* temp = curr;
+        if(curr->next==NULL){
+            tail = back;
+            tail->next = NULL;
+            delete temp;
+        }
+        else{
+            curr=curr->next;
+            back->next = curr;
+            curr->prev = back;
+            delete temp;
+        }
+    }
+}
