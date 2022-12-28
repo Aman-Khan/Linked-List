@@ -5,13 +5,19 @@
         ListNode* prev2 = NULL;
         ListNode* head1 = list1;
         ListNode* head2 = list2;
-        if(head2->val<head1->val){
-            prev2=head2;
-            head2=head2->next;
-            prev2->next = head1;
-            list1=prev2;
-            head1=prev2;
+        
+        if(list2->val<list1->val){
+            mergeTwoLists(list2, list1);
+            return list2;
         }
+        
+    // if(head2->val<head1->val){  // can use this as replacement of code from line 9 to 12.
+    //     prev2=head2;
+    //     head2=head2->next;
+    //     prev2->next = head1;
+    //     list1=prev2;
+    //     head1=prev2;
+    // }
         while(head1!=NULL && head2!=NULL){
             if(head2->val<head1->val){
                 prev2=head2;
