@@ -1,0 +1,32 @@
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+        if(list1==NULL) return list2;
+        if(list2==NULL) return list1;
+        ListNode* prev1 = NULL;
+        ListNode* prev2 = NULL;
+        ListNode* head1 = list1;
+        ListNode* head2 = list2;
+        if(head2->val<head1->val){
+            prev2=head2;
+            head2=head2->next;
+            prev2->next = head1;
+            list1=prev2;
+            head1=prev2;
+        }
+        while(head1!=NULL && head2!=NULL){
+            if(head2->val<head1->val){
+                prev2=head2;
+                prev1->next = prev2;
+                head2=head2->next;
+                prev2->next = head1;
+                prev1=prev1->next;
+            }
+            else{
+                prev1=head1;
+                head1=head1->next;
+            }
+        }
+        if(head2!=NULL){
+            prev1->next=head2;
+        }
+        return list1;
+    }
