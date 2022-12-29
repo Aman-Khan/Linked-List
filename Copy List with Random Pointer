@@ -1,3 +1,5 @@
+//Space Complexity O(n)
+
     Node* createClone(Node* head){
         Node* cloneHead = new Node(-1);
         Node* tail = cloneHead;
@@ -30,3 +32,87 @@
         }
         return cloneHead;
     }
+
+//Space Complexity
+
+    Node* createClone(Node* head){     //clone original list
+        Node* cloneHead = new Node(-1);
+        Node* tail = cloneHead;
+        while(head!=NULL){
+            Node* temp = new Node(head->val);
+            tail->next = temp;
+            tail=temp;
+            head=head->next;
+        }
+        return cloneHead->next;
+    }
+    
+    Node* joinLists(Node* head, Node* cloneHead){ //create alternative single list using original list. example blow
+        Node* orignal = head;                                                                       //  original list = [1, 2, 3, 4] 
+        Node* headNext = head->next;                                                                //  clone list    = [1, 2, 3, 4]
+        Node* cloneHeadNext = cloneHead->next;                                                      // new list       = [1, 1, 2, 2, 3, 3, 4, 4]
+        while(headNext!=NULL){
+            headNext = head->next;
+            head->next = cloneHead;
+            cloneHeadNext = cloneHead->next;
+            cloneHead->next = headNext;
+
+            head = headNext;
+            cloneHead = cloneHeadNext;
+        }
+        return orignal;
+    }
+
+    void realClone(Node* orig){                         //clone random pointer according to original list in clone list in single traversal
+        while(orig!=NULL && orig->next!=NULL){
+            if(orig->random!=NULL){
+                orig->next->random = orig->random->next;
+            }
+            orig = orig->next->next;
+        }
+    }
+    
+    void revert(Node* orig){                          //revert changes
+        Node* curr1=orig;
+        Node* curr2=orig->next;
+        if(curr1->next==NULL){
+            return;
+        }
+        Node* forw1 = curr2->next;
+        Node* forw2 = forw1->next;
+        while(true){
+            curr1->next = forw1;
+            curr2->next = forw2;
+
+            curr1=forw1;
+            curr2=forw2;
+
+            if(forw2->next==NULL){
+                forw1->next = NULL;
+                return;
+            }
+
+            forw1=forw2->next;
+            forw2 = forw1->next;
+        }
+    }
+
+    Node* copyRandomList(Node* head) {  //main function
+     
+        if(head==NULL) return NULL;
+        if(head->next==NULL){
+            Node* cloneHead = new Node(head->val);
+            if(head->random!=NULL){
+                cloneHead->random=cloneHead;
+            } 
+            return cloneHead;
+        }
+        
+        Node* cloneHead = createClone(head);
+        Node* newHead = joinLists(head, cloneHead);
+        realClone(newHead);
+        revert(newHead);
+        
+        return cloneHead;
+    }
+
